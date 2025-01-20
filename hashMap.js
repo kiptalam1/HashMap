@@ -15,22 +15,6 @@ export class HashMap {
 
         return hashCode % this.capacity;
     } 
-    resize() {
-        const newCapacity = this.capacity * 2;
-        const newBuckets = new Array(newCapacity);
-
-        for (let bucket of this.buckets) {
-            if (bucket) {
-                for (let [key, value] of bucket) {
-                    let newIndex = this.hash(key) % newCapacity;
-                    if (!newBuckets[newIndex]) newBuckets[newIndex] = [];
-                    newBuckets[newIndex].push([key, value]);
-                }
-            }
-        }
-        this.buckets = newBuckets;
-        this.capacity = newCapacity;
-    }
     set(key, value) {
         if (this.size >= this.capacity * this.loadFactor) this.resize();
         let index = this.hash(key);
@@ -72,9 +56,8 @@ export class HashMap {
     remove(key) {
         let index = this.hash(key);
 
-        if (!this.buckets[index]) {
-            return false;
-        }
+        if (!this.buckets[index]) return false;
+
         for (let [i, bucket] of this.buckets[index].entries()) {
             if (bucket[0] === key) {
                 this.buckets[index].splice(i, 1);
@@ -82,6 +65,7 @@ export class HashMap {
                 return true;
             }
         }
+        return false;
     }
     length() {
         return this.size;
@@ -122,5 +106,18 @@ export class HashMap {
             }
         }
         return allEntries;
+    }
+    resize() {
+        const oldBuckets = this.buckets;
+        this.capacity *= 2;
+        this.buckets = new Array(newCapacity);
+        this.size = 0;
+        for (let bucket of oldBuckets) {
+            if (bucket) {
+                for (let [key, value] of bucket) {
+                    this.set(key, value);
+                }
+            }
+        }
     }
 }
