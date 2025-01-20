@@ -110,7 +110,7 @@ export class HashMap {
     resize() {
         const oldBuckets = this.buckets;
         this.capacity *= 2;
-        this.buckets = new Array(newCapacity);
+        this.buckets = new Array(this.capacity);
         this.size = 0;
         for (let bucket of oldBuckets) {
             if (bucket) {
