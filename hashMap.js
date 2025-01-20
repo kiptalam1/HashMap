@@ -1,4 +1,4 @@
-class HashMap {
+export class HashMap {
     constructor (initialCapacity = 16, loadFactor = 0.75) {
         this.capacity = initialCapacity;
         this.loadFactor = loadFactor;
@@ -35,11 +35,15 @@ class HashMap {
         if (this.size >= this.capacity * this.loadFactor) this.resize();
         let index = this.hash(key);
 
-        if (!this.buckets[index]) {
-            this.buckets[index] = []
-        };
+        if (!this.buckets[index]) this.buckets[index] = [];
 
-        this.buckets[index].push([key, value]);
+        for (let entry of this.buckets[index]) {
+            if (entry[0] === key) {
+                entry[1] = value; //update value
+                return;
+            }
+        }
+        this.buckets[index].push([key, value]); // add new entry
         this.size++;
     }
     get(key) {
@@ -58,11 +62,12 @@ class HashMap {
     }
     has(key) {
         let index = this.hash(key);
-        if(!this.buckets[index]) {
-            return false;
-        } else {
-            return true;
+        if(!this.buckets[index]) return false;
+            
+        for (let [storedKey] of this.buckets[index]) {
+            if (storedKey === key) return true;
         }
+        return false;
     }
     remove(key) {
         let index = this.hash(key);
@@ -119,24 +124,3 @@ class HashMap {
         return allEntries;
     }
 }
-
-let myMap = new HashMap()
-myMap.set('name', 'Adams')
-myMap.set('age', '24')
-// myMap.clear()
-
-console.log(myMap.get('age'))
-console.log(myMap.get('name'))
-console.log(myMap.has('life'))
-// console.log(myMap.remove('age'))
-
-
-// console.log(myMap.size)
-// console.log(myMap)
-// console.log(myMap.buckets)
-console.log(myMap.keys())
-console.log(myMap.values())
-console.log(myMap.entries())
-
-
-
