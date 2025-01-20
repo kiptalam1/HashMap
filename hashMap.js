@@ -81,11 +81,49 @@ class HashMap {
     length() {
         return this.size;
     }
+    clear() {
+        this.buckets = new Array(this.capacity);
+        this.size = 0;
+    }
+    keys() {
+        let storedKeys = [];
+        for (let bucket of this.buckets) {
+            if (bucket) {
+                for (let [key] of bucket) {
+                    storedKeys.push(key);
+                }
+            }
+        }
+        return storedKeys;
+    }
+    values() {
+        let storedValues = [];
+        for (let bucket of this.buckets) {
+            if (bucket) {
+                for (let [_, value] of bucket) {
+                    storedValues.push(value);
+                }
+            }
+        }
+        return storedValues;
+    }
+    entries() {
+        let allEntries = [];
+        for (let bucket of this.buckets) {
+            if (bucket) {
+                for (let [key, value] of bucket) {
+                    allEntries.push([key, value]);
+                }
+            }
+        }
+        return allEntries;
+    }
 }
 
 let myMap = new HashMap()
 myMap.set('name', 'Adams')
 myMap.set('age', '24')
+// myMap.clear()
 
 console.log(myMap.get('age'))
 console.log(myMap.get('name'))
@@ -93,7 +131,12 @@ console.log(myMap.has('life'))
 // console.log(myMap.remove('age'))
 
 
+// console.log(myMap.size)
+// console.log(myMap)
+// console.log(myMap.buckets)
+console.log(myMap.keys())
+console.log(myMap.values())
+console.log(myMap.entries())
 
-console.log(myMap.size)
-console.log(myMap.buckets)
+
 
